@@ -1,0 +1,3 @@
+Estou aprendendo Python
+Além de Python, estou aprendendo Java
+Quero aprender C, mas Python é Top.

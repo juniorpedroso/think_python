@@ -1,0 +1,6 @@
+Estou estudando Python!
+Estou aprendendo strings.
+Eu já aprendi Java e C.
+Também estudei Git e GitHub
+Quero trabalhar com programação
+Sei que é difícil, mas vou conseguir.
