@@ -106,27 +106,35 @@ def ord_motos():
     print('Nova')
     listar_motos()
 
+
 # Loop principal
 while opcao != 0:
     opcao = menu()
+
     # listar motos
     if opcao == 1:
         listar_motos()
+
     # Cadastrar motos
     elif opcao == 2:
         adic_moto()
+
     # Remover moto
     elif opcao == 3:
         remov_moto()
+
     # Pesquisar moto
     elif opcao == 4:
         pesq_moto()
+
     # Qtd de motos
     elif opcao == 5:
         print(f'Quantidade de motocicletas: {len(motos)}')
+
     # Ordenar motos
     elif opcao == 6:
         ord_motos()
+
     # Sair
     elif opcao == 0:
         print('Saindo.....')
