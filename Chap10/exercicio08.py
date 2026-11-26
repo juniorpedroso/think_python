@@ -53,17 +53,40 @@ Dicas para desenvolver:
 Não se preocupe se não conseguir concluir esse exercício de primeira. Ele foi pensado para exigir que você combine vários conhecimentos.
 
 
-'''
 
+garagem = [
+    {
+        'Modelo': 'Himalayan',
+        'Ano': '2026',
+        'Cilindrada': '450',
+        'Cor': 'preta',
+        'Quilometragem': '3000'
+    },
+    {
+        'Modelo': 'Interceptor',
+        'Ano': '2025',
+        'Cilindrada': '650',
+        'Cor': 'preta',
+        'Quilometragem': '6000'
+    },
+    {
+        'Modelo': 'GS 1250',
+        'Ano': '2023',
+        'Cilindrada': '1250',
+        'Cor': 'branca',
+        'Quilometragem': '9000'
+    },
+    {
+        'Modelo': 'Tiger',
+        'Ano': '2022',
+        'Cilindrada': '900',
+        'Cor': 'verde',
+        'Quilometragem': '19000'
+    }
+]
+'''
 garagem = []
 
-# motocicleta = {
-#     'Modelo': None,
-#     'Ano': None,
-#     'Cilindrada': None,
-#     'Cor': None,
-#     'Quilometragem': None
-# }
 opcao = 1
 
 # função para alinhamento de palavra sendo que o máximo do tamanho da palavra será de 18
@@ -99,7 +122,7 @@ def menu():
 # Função de cadastro de motocicleta
 def cadastro():
     motocicleta = {}
-    print('Cadastro de motocicleta')
+    print('<< CADASTRO DE MOTOCICLETA >>')
     
     # recebendo os valores das variáveis
     modelo = input('Modelo: ')
@@ -123,21 +146,118 @@ def cadastro():
 
 # Função de Consulta de motocicleta
 def consulta():
-    print('Consulta de motocicleta')
+    print('<< CONSULTA DE MOTOCICLETA >>')
+
+    # verifica se há motocicletas cadastradas
+    if len(garagem) == 0:
+        print('Não há motocicletas cadastradas!')
+        return
+
+    # recebe a moto para consultar
+    moto_a_pesq = input('Digite a moto para pesquisar: ').strip()
+
+    # verifica se foi digitado um nome válido
+    if not moto_a_pesq:
+        print('Nome inválido!')
+        return
+
+    # inicial um loop pela lista garagem
+    for moto in garagem:
+        if moto_a_pesq.lower() == moto['Modelo'].lower():
+            print(f'A motocicleta {moto_a_pesq} está cadastrada.')
+            return
+    print(f'A motocicleta {moto_a_pesq} não está cadastrada.')
+
 
 # Função de atualizar quilometragem
 def atualiza_quilometragem():
-    print('Atualizando quilometragem')
+    print('<< ATUALIZAÇÃO DE QUILOMETRAGEM >>')
+
+    # verifica se há motocicletas cadastradas
+    if len(garagem) == 0:
+        print('Não há motocicletas cadastradas!')
+        return
+
+    # recebe o nome da moto para atualizar
+    moto_a_atualizar = input('Digite a moto para atualizar: ').strip()
+
+    # verifica se foi digitado nome válido
+    if not moto_a_atualizar:
+        print('Nome inválido!')
+        return
+
+    # inicia um loop pela lista garagem
+    for moto in garagem:
+        if moto_a_atualizar.lower() == moto['Modelo'].lower():
+            # se a moto estiver cadastrada solicita uma nova quilometragem
+            km_atual = input('Digite a nova quilometragem: ')
+            if not km_atual.isnumeric():
+                print('Digite somente números!')
+                return
+            
+            # verifica se o km informado é igual ou menor que o que está cadastrado
+            elif int(km_atual) == int(moto['Quilometragem']):
+                print('A quilometragem digitada é a mesma cadastrada. Não foi alterado!')
+                return
+            elif int(km_atual) < int(moto['Quilometragem']):
+                print('A quilometragem digitada é menor que a cadastrada. Não foi alterado!')
+                return
+            
+            # atualiza a quilomentragem
+            else:
+                moto['Quilometragem'] = km_atual
+                print('Quilometragem atualizada!')
+                return
+    
+    print(f'Motocicleta {moto_a_atualizar} não cadastrada!')
 
 # Função de excluir motocicleta
 def exclui():
-    print('Exclui motocicleta')
+    print('<< EXCLUSÃO DE MOTOCICLETA >>')
+
+    # verifica se a lista garagem está vazia
+    if len(garagem) == 0:
+        print('Não há motocicletas cadastradas!')
+        return
+    
+    # recebe a motocicleta para excluir
+    moto_a_excluir = input('Digite a moto para excluir: ').strip()
+    if not moto_a_excluir:
+        print('Nome inválido!')
+        return
+
+    # inicia um loop pela lista garagem
+    for moto in garagem:
+        if moto_a_excluir.lower() == moto['Modelo'].lower():
+
+            # solicita confirmação para excluir a motocicleta
+            confirma = input(f'Confirma que quer excluir {moto_a_excluir}? S/N: ')
+            if confirma in 'Ss':
+                
+                # remove a motocicleta
+                garagem.remove(moto)
+                print(f'A motocicleta {moto_a_excluir} foi excluída!.')
+                return
+            else:
+                print(f'A motocicleta {moto_a_excluir} NÃO foi excluída!.')
+                return
+            
+    print(f'A motocicleta {moto_a_excluir} não está cadastrada.')
+
+
 
 # Função de listar motocicleta
 def listar():
-    print('Lista de motocicletas')
+    print('<< LISTA DE MOTOCICLETAS >>')
+
+    # verifica se há motocicletas cadastradas
+    if len(garagem) == 0:
+        print('Não há motocicletas cadastradas!')
+        return   
+    
+    # Desenha a borda superior da lista
     print('┌' + (19 * "─") + '┬' + (19 * "─") + '┬' + (19 * "─") + '┬' + (19 * "─")  + '┬' + (19 * "─") + '┐')
-    # print(garagem)
+    # print o menu da lista
     print('│',end='')
     print_palavra('Modelo')
     print_palavra('Ano')
@@ -145,13 +265,19 @@ def listar():
     print_palavra('Cor')
     print_palavra('Quilometragem')
     print()
+    # desenha a borda do meio da lista
     print('├' + (19 * "─") + '┼' + (19 * "─") + '┼' + (19 * "─") + '┼' + (19 * "─")  + '┼' + (19 * "─") + '┤')
+
+    # inicia um loop pela lista garagem
     for moto in garagem:
         for chave, valor in moto.items():
+
+            # print dos dados das motocicletas
             if chave == 'Modelo':
                 print('│',end='')
             print_palavra(valor)
         print()
+    # desenha a borda inferior da lista
     print('└' + (19 * "─") + '┴' + (19 * "─") + '┴' + (19 * "─") + '┴' + (19 * "─")  + '┴' + (19 * "─") + '┘')
 
 # loop principal
