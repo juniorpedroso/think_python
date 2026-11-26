@@ -55,15 +55,27 @@ Não se preocupe se não conseguir concluir esse exercício de primeira. Ele foi
 
 '''
 
-garagem = {}
-motocicleta = {
-    'Modelo': None,
-    'Ano': None,
-    'Cilindrada': None,
-    'Cor': None,
-    'Quilometragem': None
-}
+garagem = []
+
+# motocicleta = {
+#     'Modelo': None,
+#     'Ano': None,
+#     'Cilindrada': None,
+#     'Cor': None,
+#     'Quilometragem': None
+# }
 opcao = 1
+
+# função para alinhamento de palavra sendo que o máximo do tamanho da palavra será de 18
+def print_palavra(palavra):
+    tam_palavra = len(palavra)
+    if tam_palavra > 18:
+        nova_palavra = palavra[:18]
+        print(f' {nova_palavra}│', end='')
+    else:
+        margem = (18 - tam_palavra) * ' '
+        print(f' {palavra}{margem}│',end='')
+
 
 def menu():
     print('''
@@ -76,11 +88,38 @@ def menu():
 5 - Listar motocicletas
 6 - Sair
 ''')
-    return int(input('Escolha uma opção: '))
+    # return int(input('Escolha uma opção: '))
+    try:
+        return int(input('Escolha uma opção: '))
+    except ValueError:
+        print('Digite somente números!')
+        return -1
+
 
 # Função de cadastro de motocicleta
 def cadastro():
-    print('Motocicleta cadastrada com sucesso!')
+    motocicleta = {}
+    print('Cadastro de motocicleta')
+    
+    # recebendo os valores das variáveis
+    modelo = input('Modelo: ')
+    ano = input('Ano: ')
+    cilindrada = input('Cilindrada: ')
+    cor = input('Cor: ')
+    quilometragem = input('Quilometragem: ')
+
+    # salvando os valores no dicionário
+    motocicleta['Modelo'] = modelo
+    motocicleta['Ano'] = ano
+    motocicleta['Cilindrada'] = cilindrada
+    motocicleta['Cor'] = cor
+    motocicleta['Quilometragem'] = quilometragem
+
+    # salvando o dicionário na lista
+    garagem.append(motocicleta)
+    print(f'Motocicleta {modelo} cadastrada com sucesso!')
+
+    
 
 # Função de Consulta de motocicleta
 def consulta():
@@ -97,7 +136,23 @@ def exclui():
 # Função de listar motocicleta
 def listar():
     print('Lista de motocicletas')
-
+    print('┌' + (19 * "─") + '┬' + (19 * "─") + '┬' + (19 * "─") + '┬' + (19 * "─")  + '┬' + (19 * "─") + '┐')
+    # print(garagem)
+    print('│',end='')
+    print_palavra('Modelo')
+    print_palavra('Ano')
+    print_palavra('Cilindrada')
+    print_palavra('Cor')
+    print_palavra('Quilometragem')
+    print()
+    print('├' + (19 * "─") + '┼' + (19 * "─") + '┼' + (19 * "─") + '┼' + (19 * "─")  + '┼' + (19 * "─") + '┤')
+    for moto in garagem:
+        for chave, valor in moto.items():
+            if chave == 'Modelo':
+                print('│',end='')
+            print_palavra(valor)
+        print()
+    print('└' + (19 * "─") + '┴' + (19 * "─") + '┴' + (19 * "─") + '┴' + (19 * "─")  + '┴' + (19 * "─") + '┘')
 
 # loop principal
 while opcao != 6:
