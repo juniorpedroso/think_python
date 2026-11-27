@@ -207,60 +207,62 @@ def exclui(garagem):
 
 # Função de listar motocicleta
 def listar(garagem):
+    """Lista todas as motocicletas em formato de tabela"""
     print('\n<< LISTA DE MOTOCICLETAS >>')
-
-    # verifica se há motocicletas cadastradas
-    if garagem_vazia():
-        return   
     
-    # Desenha a borda superior da lista
-    print('┌' + (19 * "─") + '┬' + (19 * "─") + '┬' + (19 * "─") + '┬' + (19 * "─")  + '┬' + (19 * "─") + '┐')
-    # print o menu da lista
-    print('│',end='')
-    print_palavra('Modelo')
-    print_palavra('Ano')
-    print_palavra('Cilindrada')
-    print_palavra('Cor')
-    print_palavra('Quilometragem')
+    if garagem_vazia():
+        return
+    
+    # ✅ Lista (não set!) para manter a ordem das colunas
+    colunas = ['modelo', 'ano', 'cilindrada', 'cor', 'quilometragem']
+    
+    # Desenhar borda superior
+    print('┌' + (19 * '─') * len(colunas) + '┐')
+    
+    # Cabeçalho
+    print('│', end='')
+    for coluna in colunas:
+        print_palavra(coluna.capitalize())
     print()
-    # desenha a borda do meio da lista
-    print('├' + (19 * "─") + '┼' + (19 * "─") + '┼' + (19 * "─") + '┼' + (19 * "─")  + '┼' + (19 * "─") + '┤')
-
-    # inicia um loop pela lista garagem
+    
+    # Linha separadora
+    print('├' + (19 * '─') * len(colunas) + '┤')
+    
+    # Dados
     for moto in garagem:
-        print('│',end='')
-        for chave in ['modelo', 'ano', 'cilindrada', 'cor', 'quilometragem']:
+        print('│', end='')
+        for chave in colunas:  # ✅ Agora usa a lista ordenada
             print_palavra(str(moto[chave]))
         print()
-
-    # desenha a borda inferior da lista
-    print('└' + (19 * "─") + '┴' + (19 * "─") + '┴' + (19 * "─") + '┴' + (19 * "─")  + '┴' + (19 * "─") + '┘')
-
-# loop principal
-while opcao != 6:
-    opcao = menu()
-
-    # Cadastrar motocicleta
-    if opcao == 1:
-        cadastro(garagem)
-
-    # Consulta de motocicleta
-    elif opcao == 2:
-        consulta(garagem)
-
-    # Atualização de quilometragem
-    elif opcao == 3:
-        atualiza_quilometragem(garagem)
-
-    # Exclui motocicleta
-    elif opcao == 4:
-        exclui(garagem)
-
-    # Listar motocicleta
-    elif opcao == 5:
-        listar(garagem)
-
-    # Sair do programa
-    elif opcao == 6:
-        print('Saindo....')
     
+    # Borda inferior
+    print('└' + (19 * '─') * len(colunas) + '┘')
+    
+    print(f'\n📊 Total: {len(garagem)} motocicleta(s)')
+
+
+# Loop principal
+def main():
+    """Função principal do programa"""
+    while True:
+        opcao = menu()
+        
+        if opcao == 1:
+            cadastro(garagem)
+        elif opcao == 2:
+            consulta(garagem)
+        elif opcao == 3:
+            atualiza_quilometragem(garagem)
+        elif opcao == 4:
+            exclui(garagem)
+        elif opcao == 5:
+            listar(garagem)
+        elif opcao == 6:
+            print('\n👋 Saindo do sistema... Até logo!')
+            break
+        
+        input('\nPressione Enter para continuar...')
+
+
+if __name__ == '__main__':
+    main()
