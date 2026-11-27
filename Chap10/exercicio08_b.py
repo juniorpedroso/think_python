@@ -8,8 +8,14 @@ opcao = 1
 
 # função para alinhamento de palavra sendo que o máximo do tamanho da palavra será de 18
 def print_palavra(palavra):
-    print(f' {palavra[:18].ljust(18)}│', end='')
+    print(f' {str(palavra)[:18].ljust(18)}│', end='')
 
+# Função para verificar se a lista garagem está vazia
+def garagem_vazia():
+    if not garagem:
+        print('Não há motocicletas cadastradas!')
+        return True
+    return False
 
 def menu():
     print('''
@@ -38,23 +44,30 @@ def menu():
 
 
 # Função de cadastro de motocicleta
-def cadastro():
+def cadastro(garagem):
     motocicleta = {}
     print('<< CADASTRO DE MOTOCICLETA >>')
     
     # recebendo os valores das variáveis
-    modelo = input('Modelo: ')
-    ano = input('Ano: ')
-    cilindrada = input('Cilindrada: ')
+    modelo = input('Modelo: ').strip()
+
+    # verificar se a motocicleta já não está cadastrada
+    for moto in garagem:
+        if moto['modelo'].lower() == modelo.lower():
+            print('Essa motocicleta já está cadastrada!')
+            return
+
+    ano = int(input('Ano: '))
+    cilindrada = int(input('Cilindrada: '))
     cor = input('Cor: ')
-    quilometragem = input('Quilometragem: ')
+    quilometragem = int(input('Quilometragem: '))
 
     # salvando os valores no dicionário
-    motocicleta['Modelo'] = modelo
-    motocicleta['Ano'] = ano
-    motocicleta['Cilindrada'] = cilindrada
-    motocicleta['Cor'] = cor
-    motocicleta['Quilometragem'] = quilometragem
+    motocicleta['modelo'] = modelo
+    motocicleta['ano'] = ano
+    motocicleta['cilindrada'] = cilindrada
+    motocicleta['cor'] = cor
+    motocicleta['quilometragem'] = quilometragem
 
     # salvando o dicionário na lista
     garagem.append(motocicleta)
@@ -63,12 +76,11 @@ def cadastro():
     
 
 # Função de Consulta de motocicleta
-def consulta():
+def consulta(garagem):
     print('<< CONSULTA DE MOTOCICLETA >>')
 
     # verifica se há motocicletas cadastradas
-    if len(garagem) == 0:
-        print('Não há motocicletas cadastradas!')
+    if garagem_vazia():
         return
 
     # recebe a moto para consultar
@@ -81,19 +93,22 @@ def consulta():
 
     # inicial um loop pela lista garagem
     for moto in garagem:
-        if moto_a_pesq.lower() == moto['Modelo'].lower():
+        if moto_a_pesq.lower() == moto['modelo'].lower():
             print(f'A motocicleta {moto_a_pesq} está cadastrada.')
+
+            # print da motocicleta cadastrada
+            for chave, valor in moto.items():
+                print(f'{chave}: {valor}')
             return
     print(f'A motocicleta {moto_a_pesq} não está cadastrada.')
 
 
 # Função de atualizar quilometragem
-def atualiza_quilometragem():
+def atualiza_quilometragem(garagem):
     print('<< ATUALIZAÇÃO DE QUILOMETRAGEM >>')
 
     # verifica se há motocicletas cadastradas
-    if len(garagem) == 0:
-        print('Não há motocicletas cadastradas!')
+    if garagem_vazia():
         return
 
     # recebe o nome da moto para atualizar
@@ -106,36 +121,35 @@ def atualiza_quilometragem():
 
     # inicia um loop pela lista garagem
     for moto in garagem:
-        if moto_a_atualizar.lower() == moto['Modelo'].lower():
+        if moto_a_atualizar.lower() == moto['modelo'].lower():
             # se a moto estiver cadastrada solicita uma nova quilometragem
             km_atual = input('Digite a nova quilometragem: ')
-            if not km_atual.isnumeric():
-                print('Digite somente números!')
+            if not km_atual.isdigit() or int(km_atual) < 0:
+                print('Digite uma quilometragem válida!')
                 return
             
             # verifica se o km informado é igual ou menor que o que está cadastrado
-            elif int(km_atual) == int(moto['Quilometragem']):
+            elif int(km_atual) == moto['quilometragem']:
                 print('A quilometragem digitada é a mesma cadastrada. Não foi alterado!')
                 return
-            elif int(km_atual) < int(moto['Quilometragem']):
+            elif int(km_atual) < moto['quilometragem']:
                 print('A quilometragem digitada é menor que a cadastrada. Não foi alterado!')
                 return
             
             # atualiza a quilomentragem
             else:
-                moto['Quilometragem'] = km_atual
+                moto['quilometragem'] = int(km_atual)
                 print('Quilometragem atualizada!')
                 return
     
     print(f'Motocicleta {moto_a_atualizar} não cadastrada!')
 
 # Função de excluir motocicleta
-def exclui():
+def exclui(garagem):
     print('<< EXCLUSÃO DE MOTOCICLETA >>')
 
     # verifica se a lista garagem está vazia
-    if len(garagem) == 0:
-        print('Não há motocicletas cadastradas!')
+    if garagem_vazia():
         return
     
     # recebe a motocicleta para excluir
@@ -146,12 +160,11 @@ def exclui():
 
     # inicia um loop pela lista garagem
     for moto in garagem:
-        if moto_a_excluir.lower() == moto['Modelo'].lower():
+        if moto_a_excluir.lower() == moto['modelo'].lower():
 
             # solicita confirmação para excluir a motocicleta
-            confirma = input(f'Confirma que quer excluir {moto_a_excluir}? S/N: ')
-            if confirma in 'Ss':
-                
+            confirma = input(f'Confirma que quer excluir {moto_a_excluir}? S/N: ').strip().lower()
+            if confirma in 's':
                 # remove a motocicleta
                 garagem.remove(moto)
                 print(f'A motocicleta {moto_a_excluir} foi excluída!.')
@@ -165,12 +178,11 @@ def exclui():
 
 
 # Função de listar motocicleta
-def listar():
+def listar(garagem):
     print('<< LISTA DE MOTOCICLETAS >>')
 
     # verifica se há motocicletas cadastradas
-    if len(garagem) == 0:
-        print('Não há motocicletas cadastradas!')
+    if garagem_vazia():
         return   
     
     # Desenha a borda superior da lista
@@ -188,13 +200,11 @@ def listar():
 
     # inicia um loop pela lista garagem
     for moto in garagem:
-        for chave, valor in moto.items():
-
-            # print dos dados das motocicletas
-            if chave == 'Modelo':
-                print('│',end='')
-            print_palavra(valor)
+        print('│',end='')
+        for chave in ['modelo', 'ano', 'cilindrada', 'cor', 'quilometragem']:
+            print_palavra(str(moto[chave]))
         print()
+
     # desenha a borda inferior da lista
     print('└' + (19 * "─") + '┴' + (19 * "─") + '┴' + (19 * "─") + '┴' + (19 * "─")  + '┴' + (19 * "─") + '┘')
 
@@ -204,23 +214,23 @@ while opcao != 6:
 
     # Cadastrar motocicleta
     if opcao == 1:
-        cadastro()
+        cadastro(garagem)
 
     # Consulta de motocicleta
     elif opcao == 2:
-        consulta()
+        consulta(garagem)
 
     # Atualização de quilometragem
     elif opcao == 3:
-        atualiza_quilometragem()
+        atualiza_quilometragem(garagem)
 
     # Exclui motocicleta
     elif opcao == 4:
-        exclui()
+        exclui(garagem)
 
     # Listar motocicleta
     elif opcao == 5:
-        listar()
+        listar(garagem)
 
     # Sair do programa
     elif opcao == 6:
